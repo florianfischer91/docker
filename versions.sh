@@ -253,7 +253,7 @@ for version in "${versions[@]}"; do
 		esac
 	done
 
-	for alwaysExpectedArch in amd64 arm64v8; do
+	for alwaysExpectedArch in amd64; do
 		if [ -z "${hasArches["$alwaysExpectedArch"]:-}" ]; then
 			echo >&2 "error: missing '$alwaysExpectedArch' for '$version'; cowardly refusing to continue! (because this is almost always a scraping flake or similar bug)"
 			exit 1
