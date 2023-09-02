@@ -1,5 +1,5 @@
-# converts a bashbrew architecture to apk's strings
-def apkArch:
+# converts a bashbrew architecture to apt's strings
+def aptArch:
 	{
 		# https://dl-cdn.alpinelinux.org/alpine/edge/main/
 		# https://wiki.alpinelinux.org/wiki/Architecture#Alpine_Hardware_Architecture_.28.22arch.22.29_Support
@@ -23,19 +23,19 @@ def apkArch:
 def download(opts):
 	(opts.sha256Key | not) as $notSha256
 	| [
-	"apkArch=\"$(apk --print-arch)\";
-	case \"$apkArch\" in"
+	"aptArch=\"$(uname -m)\";
+	case \"$aptArch\" in"
 		,
 		(
 		opts.arches | to_entries[]
 		| .key as $bashbrewArch
-		| ($bashbrewArch | apkArch) as $apkArch
+		| ($bashbrewArch | aptArch) as $aptArch
 		| .value
 		| .[opts.urlKey] as $url
 		| (if $notSha256 then "none" else .[opts.sha256Key] end) as $sha256
-		| select($apkArch and $url and $sha256)
+		| select($aptArch and $url and $sha256)
 		| ("
-		\($apkArch | @sh))
+		\($aptArch | @sh))
 			url=\($url | @sh);"
 			+ if $notSha256 then "" else "
 			sha256=\($sha256 | @sh);"
@@ -45,7 +45,7 @@ def download(opts):
 		)
 		,
 		"
-		*) echo >&2 \"\(if opts.missingArchWarning then "warning" else "error" end): unsupported \(opts.target | @sh) architecture ($apkArch)\(if opts.missingArchWarning then "; skipping" else "" end)\"; exit \(if opts.missingArchWarning then 0 else 1 end) ;;
+		*) echo >&2 \"\(if opts.missingArchWarning then "warning" else "error" end): unsupported \(opts.target | @sh) architecture ($aptArch)\(if opts.missingArchWarning then "; skipping" else "" end)\"; exit \(if opts.missingArchWarning then 0 else 1 end) ;;
 	esac;
 	
 	wget -O \(opts.target | @sh) \"$url\";"

@@ -1,16 +1,19 @@
 {{ include "shared" -}}
-FROM alpine:3.18
+FROM ubuntu:18.04
 
-RUN apk add --no-cache \
+RUN apt update \
+    && apt install -y --no-install-recommends \
 		ca-certificates \
 # DOCKER_HOST=ssh://... -- https://github.com/docker/cli/pull/1014
-		openssh-client
+		openssh-client \
+		wget \
+    && rm -rf /var/lib/apt/lists/*
 
 # ensure that nsswitch.conf is set up for Go's "netgo" implementation (which Docker explicitly uses)
 # - https://github.com/moby/moby/blob/v20.10.21/hack/make.sh#L115
 # - https://github.com/golang/go/blob/go1.19.3/src/net/conf.go#L227-L303
 # - docker run --rm debian:stretch grep '^hosts:' /etc/nsswitch.conf
-RUN [ -e /etc/nsswitch.conf ] && grep '^hosts: files dns' /etc/nsswitch.conf
+RUN [ -e /etc/nsswitch.conf ] && grep '^hosts:          files dns' /etc/nsswitch.conf
 
 ENV DOCKER_VERSION {{ .version }}
 
