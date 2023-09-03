@@ -1,0 +1,19 @@
+services:
+  
+  cli-{{ env.version }}:
+    build:
+      context: cli
+      dockerfile: Dockerfile
+    image: docker-ubuntu:{{ .version }}-cli
+
+  dind-{{ env.version }}:
+    build:
+      context: dind
+      dockerfile: Dockerfile
+    image: docker-ubuntu:{{ .version }}-dind
+
+  git-{{ env.version }}:
+    build:
+      context: git
+      dockerfile: Dockerfile
+    image: docker-ubuntu:{{ .version }}-git

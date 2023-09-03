@@ -70,4 +70,9 @@ for version; do
 
 	cp -a docker-entrypoint.sh modprobe.sh "$version/cli/"
 	cp -a dockerd-entrypoint.sh "$version/dind/"
+
+	{
+		generated_warning
+		gawk -f "$jqt" "docker-compose.yml.template"
+	} > "$version/docker-compose.yml"
 done

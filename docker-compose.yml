@@ -1,0 +1,4 @@
+include:
+  - 20/docker-compose.yml
+  - 23/docker-compose.yml
+  - 24/docker-compose.yml
