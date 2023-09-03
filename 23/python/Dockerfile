@@ -4,9 +4,9 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM docker-ubuntu:24.0.5-dind
+FROM docker-ubuntu:23.0.6-dind
 
 RUN apt update \
     && apt install -y --no-install-recommends \
-		  git \
+		  python3 \
     && rm -rf /var/lib/apt/lists/*

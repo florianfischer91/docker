@@ -8,5 +8,5 @@ FROM docker-ubuntu:24.0.5-dind
 
 RUN apt update \
     && apt install -y --no-install-recommends \
-		  git \
+		  python3 \
     && rm -rf /var/lib/apt/lists/*

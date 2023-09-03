@@ -4,56 +4,49 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM docker:23-cli
+FROM docker-ubuntu:23.0.6-cli
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
 RUN set -eux; \
-	apk add --no-cache \
+	apt update; \
+    apt install -y --no-install-recommends \
 		btrfs-progs \
 		e2fsprogs \
-		e2fsprogs-extra \
-		ip6tables \
+		# e2fsprogs-extra \
+		# ip6tables \
 		iptables \
 		openssl \
-		shadow-uidmap \
+		# shadow-uidmap \
 		xfsprogs \
-		xz \
+		xz-utils \
 # pigz: https://github.com/moby/moby/pull/35697 (faster gzip implementation)
 		pigz \
 	; \
 # only install zfs if it's available for the current architecture
-# https://git.alpinelinux.org/cgit/aports/tree/main/zfs/APKBUILD?h=3.6-stable#n9 ("all !armhf !ppc64le" as of 2017-11-01)
+# https://git.alpinelinux.org/cgit/aports/tree/main/zfs/apkBUILD?h=3.6-stable#n9 ("all !armhf !ppc64le" as of 2017-11-01)
 # "apk info XYZ" exits with a zero exit code but no output when the package exists but not for this arch
-	if zfs="$(apk info --no-cache --quiet zfs)" && [ -n "$zfs" ]; then \
-		apk add --no-cache zfs; \
-	fi
+#	if zfs="$(apk info --no-cache --quiet zfs)" && [ -n "$zfs" ]; then \
+#		apk add --no-cache zfs; \
+#	fi
+	rm -rf /var/lib/apt/lists/*
 
 # TODO aufs-tools
 
 # set up subuid/subgid so that "--userns-remap=default" works out-of-the-box
 RUN set -eux; \
-	addgroup -S dockremap; \
-	adduser -S -G dockremap dockremap; \
+	groupadd dockremap; \
+	useradd -g dockremap dockremap; \
 	echo 'dockremap:165536:65536' >> /etc/subuid; \
 	echo 'dockremap:165536:65536' >> /etc/subgid
 
 RUN set -eux; \
 	\
-	apkArch="$(apk --print-arch)"; \
-	case "$apkArch" in \
+	aptArch="$(uname -m)"; \
+	case "$aptArch" in \
 		'x86_64') \
 			url='https://download.docker.com/linux/static/stable/x86_64/docker-23.0.6.tgz'; \
 			;; \
-		'armhf') \
-			url='https://download.docker.com/linux/static/stable/armel/docker-23.0.6.tgz'; \
-			;; \
-		'armv7') \
-			url='https://download.docker.com/linux/static/stable/armhf/docker-23.0.6.tgz'; \
-			;; \
-		'aarch64') \
-			url='https://download.docker.com/linux/static/stable/aarch64/docker-23.0.6.tgz'; \
-			;; \
-		*) echo >&2 "error: unsupported 'docker.tgz' architecture ($apkArch)"; exit 1 ;; \
+		*) echo >&2 "error: unsupported 'docker.tgz' architecture ($aptArch)"; exit 1 ;; \
 	esac; \
 	\
 	wget -O 'docker.tgz' "$url"; \

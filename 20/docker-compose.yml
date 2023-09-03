@@ -1,0 +1,31 @@
+#
+# NOTE: THIS DOCKERFILE IS GENERATED VIA "apply-templates.sh"
+#
+# PLEASE DO NOT EDIT IT DIRECTLY.
+#
+
+services:
+  
+  cli-20:
+    build:
+      context: cli
+      dockerfile: Dockerfile
+    image: docker-ubuntu:20.10.24-cli
+
+  dind-20:
+    build:
+      context: dind
+      dockerfile: Dockerfile
+    image: docker-ubuntu:20.10.24-dind
+
+  git-20:
+    build:
+      context: git
+      dockerfile: Dockerfile
+    image: docker-ubuntu:20.10.24-git
+
+  python-20:
+    build:
+      context: python
+      dockerfile: Dockerfile
+    image: docker-ubuntu:20.10.24-python

@@ -4,7 +4,7 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM docker-ubuntu:24.0.5-cli
+FROM docker-ubuntu:20.10.24-cli
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
 RUN set -eux; \
@@ -44,7 +44,7 @@ RUN set -eux; \
 	aptArch="$(uname -m)"; \
 	case "$aptArch" in \
 		'x86_64') \
-			url='https://download.docker.com/linux/static/stable/x86_64/docker-24.0.5.tgz'; \
+			url='https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.tgz'; \
 			;; \
 		*) echo >&2 "error: unsupported 'docker.tgz' architecture ($aptArch)"; exit 1 ;; \
 	esac; \
@@ -56,7 +56,7 @@ RUN set -eux; \
 		--strip-components 1 \
 		--directory /usr/local/bin/ \
 		--no-same-owner \
-# we exclude the CLI binary because we already extracted that over in the "docker:24-cli" image that we're FROM and we don't want to duplicate those bytes again in this layer
+# we exclude the CLI binary because we already extracted that over in the "docker:20-cli" image that we're FROM and we don't want to duplicate those bytes again in this layer
 		--exclude 'docker/docker' \
 	; \
 	rm docker.tgz; \

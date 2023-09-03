@@ -20,14 +20,14 @@ RUN apt update \
 # - docker run --rm debian:stretch grep '^hosts:' /etc/nsswitch.conf
 RUN [ -e /etc/nsswitch.conf ] && grep '^hosts:          files dns' /etc/nsswitch.conf
 
-ENV DOCKER_VERSION 24.0.5
+ENV DOCKER_VERSION 20.10.24
 
 RUN set -eux; \
 	\
 	aptArch="$(uname -m)"; \
 	case "$aptArch" in \
 		'x86_64') \
-			url='https://download.docker.com/linux/static/stable/x86_64/docker-24.0.5.tgz'; \
+			url='https://download.docker.com/linux/static/stable/x86_64/docker-20.10.24.tgz'; \
 			;; \
 		*) echo >&2 "error: unsupported 'docker.tgz' architecture ($aptArch)"; exit 1 ;; \
 	esac; \

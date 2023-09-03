@@ -4,6 +4,9 @@
 # PLEASE DO NOT EDIT IT DIRECTLY.
 #
 
-FROM docker:23-dind
+FROM docker-ubuntu:23.0.6-dind
 
-RUN apk add --no-cache git
+RUN apt update \
+    && apt install -y --no-install-recommends \
+		  git \
+    && rm -rf /var/lib/apt/lists/*
