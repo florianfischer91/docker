@@ -17,3 +17,9 @@ services:
       context: git
       dockerfile: Dockerfile
     image: docker-ubuntu:{{ .version }}-git
+
+  python-{{ env.version }}:
+    build:
+      context: python
+      dockerfile: Dockerfile
+    image: docker-ubuntu:{{ .version }}-python

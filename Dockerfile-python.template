@@ -1,0 +1,6 @@
+FROM docker-ubuntu:{{ .version }}-dind
+
+RUN apt update \
+    && apt install -y --no-install-recommends \
+		  python3 \
+    && rm -rf /var/lib/apt/lists/*

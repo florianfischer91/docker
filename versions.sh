@@ -271,6 +271,7 @@ for version in "${versions[@]}"; do
 		cli \
 		dind \
 		git \
+		python \
 		windows/windowsservercore-ltsc2022 \
 		windows/windowsservercore-1809 \
 	; do
