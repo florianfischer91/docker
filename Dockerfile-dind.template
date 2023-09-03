@@ -1,5 +1,5 @@
 {{ include "shared" -}}
-FROM docker-ubuntu:{{ env.version }}-cli
+FROM docker-ubuntu:{{ .version }}-cli
 
 # https://github.com/docker/docker/blob/master/project/PACKAGERS.md#runtime-dependencies
 RUN set -eux; \

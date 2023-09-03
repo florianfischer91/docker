@@ -266,10 +266,10 @@ for version in "${versions[@]}"; do
 	done
 
 	# order here controls the order of the library/ file
+	# dind-rootless \
 	for variant in \
 		cli \
 		dind \
-		dind-rootless \
 		git \
 		windows/windowsservercore-ltsc2022 \
 		windows/windowsservercore-1809 \
