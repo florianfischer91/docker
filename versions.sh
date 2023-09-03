@@ -170,9 +170,9 @@ for version in "${versions[@]}"; do
 	rcVersion="${version%-rc}"
 	export version rcVersion
 	channel='stable'
-
+	
 	versionOptions="$(grep "^$rcVersion[.]" <<<"$dockerVersions")"
-
+	
 	rcGrepV='-v'
 	if [ "$rcVersion" != "$version" ]; then
 		rcGrepV=
@@ -189,6 +189,11 @@ for version in "${versions[@]}"; do
 		exit 1
 	fi
 
+	if [ "$fullVersion" == "20.10.25" ]; then
+		fullVersion="20.10.24"
+		echo "warning: 20.10 branch of the upstream Moby project doesn't provide versions older than 20.10.24"
+		echo "warning: Set version to v$fullVersion"
+	fi
 	# if this is a "-rc" release, let's make sure the release it contains isn't already GA (and thus something we should not publish anymore)
 	if [ "$rcVersion" != "$version" ] && rcFullVersion="$(jq <<<"$json" -r '.[env.rcVersion].version // ""')" && [ -n "$rcFullVersion" ]; then
 		latestVersion="$({ echo "$fullVersion"; echo "$rcFullVersion"; } | sort -V | tail -1)"
